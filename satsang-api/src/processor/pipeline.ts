@@ -529,33 +529,12 @@ export async function processAudioCleanup(
     console.log(`[${jobId}] Step 1: Stitch started`);
     const stitchedPath = path.join(jobDir, 'stitched.mp3');
 
-    // Always convert to MP3 format to ensure compatibility with downstream steps
-    if (inputFiles.length === 1 && inputFiles[0].endsWith('.mp3')) {
-      // Only copy if it's already MP3
+    // Handle single or multiple files (MP3, M4A, or other audio formats)
+    if (inputFiles.length === 1) {
+      // Single file: copy as-is (FFmpeg handles MP3 and M4A equally)
       fs.copyFileSync(inputFiles[0], stitchedPath);
       jobStore.updateStep(jobId, 'stitch', { status: 'complete', progressPercent: 100 });
-      console.log(`[${jobId}] Step 1 complete (single MP3 file copy)`);
-    } else if (inputFiles.length === 1) {
-      // Convert M4A or other format to MP3
-      await new Promise<void>((resolve, reject) => {
-        ffmpeg(inputFiles[0])
-          .audioCodec('libmp3lame')
-          .audioBitrate('192k')
-          .on('progress', (progress: any) => {
-            const percent = Math.floor(progress.percent || 0);
-            jobStore.updateStep(jobId, 'stitch', { progressPercent: Math.min(percent, 95) });
-          })
-          .on('end', () => {
-            jobStore.updateStep(jobId, 'stitch', { status: 'complete', progressPercent: 100 });
-            console.log(`[${jobId}] Step 1 complete (converted to MP3)`);
-            resolve();
-          })
-          .on('error', (err) => {
-            console.error(`[${jobId}] Conversion failed:`, err);
-            reject(err);
-          })
-          .save(stitchedPath);
-      });
+      console.log(`[${jobId}] Step 1 complete (single file copy)`);
     } else {
       await new Promise<void>((resolve, reject) => {
         ffmpeg()
