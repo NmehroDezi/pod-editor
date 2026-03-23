@@ -1,0 +1,23 @@
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  error?: string;
+}
+
+export function Input({ label, error, className = '', ...props }: InputProps) {
+  return (
+    <div className="w-full">
+      {label && (
+        <label className="block text-sm font-semibold text-satsang-bark mb-2">
+          {label}
+        </label>
+      )}
+      <input
+        className={`w-full px-4 py-2.5 rounded-lg border-2 border-satsang-sandalwood bg-satsang-parchment text-satsang-soil placeholder-satsang-ash focus:outline-none focus:border-satsang-saffron focus:ring-2 focus:ring-satsang-turmeric/20 transition-all ${className}`}
+        {...props}
+      />
+      {error && (
+        <p className="text-sm text-red-600 mt-1">{error}</p>
+      )}
+    </div>
+  );
+}

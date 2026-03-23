@@ -1,0 +1,65 @@
+🚨 CLAUDE CODE - CRITICAL RULES FOR THIS PROJECT 🚨
+
+=== RULE 1: WHEN USER SAYS "CHECK THE PROJECT FOLDER" ===
+You MUST do ALL of these:
+
+1. List root directory files:
+   ls -1 "/Users/nityamehrotra/Desktop/podcast editor/" | grep -v "^satsang\|^\.claude"
+
+2. Verify only ONE podcast folder on Desktop:
+   ls -d ~/Desktop/podcast* 2>/dev/null
+
+3. Check satsang-api root files:
+   ls -1 "/Users/nityamehrotra/Desktop/podcast editor/satsang-api/" | grep -v "^node\|^src\|^dist"
+
+4. Check satsang-editor root files:
+   ls -1 "/Users/nityamehrotra/Desktop/podcast editor/satsang-editor/" | grep -v "^node\|^src\|^dist\|^\\."
+
+5. Report EVERY file found - do not skip
+6. DELETE any .md files except PROJECT.md
+7. DELETE any extra documentation files
+8. List temp-jobs folder size:
+   du -sh "/Users/nityamehrotra/Desktop/podcast editor/satsang-api/temp-jobs/" 2>/dev/null
+
+=== RULE 2: DOCUMENTATION ===
+- ONLY PROJECT.md at root level
+- NO CHANGES_MADE.md
+- NO STORAGE_AND_FILES.md
+- NO PROJECT_SUMMARY.md
+- NO README.md in satsang folders
+- NO extra .txt or .md files
+
+=== RULE 3: FILE CREATION ===
+- When you write files, ALWAYS use:
+  "$HOME/Desktop/podcast editor/..." in bash
+  NOT: "~/Desktop/podcast editor/..."
+  NOT: "/Users/nityamehrotra/Desktop/podcast\\ editor/..."
+
+=== RULE 4: AFTER EVERY SESSION ===
+Before saying "done", run:
+  ls -1 "/Users/nityamehrotra/Desktop/podcast editor/" | grep -E "\.(md|txt)$"
+  
+If ANY .md files except PROJECT.md appear, DELETE them immediately.
+
+=== RULE 5: IF YOU FORGET ===
+User will say: "check the project folder"
+This is YOUR REMINDER to do the full audit.
+Do NOT skip anything. Do NOT assume it's clean.
+Verify EVERY file location.
+
+=== RULE 6: NEVER CREATE DUPLICATE FOLDERS ===
+Before finishing any task:
+  ls -d ~/Desktop/podcast* 2>/dev/null | wc -l
+Should return: 1
+If returns 2 or more, DELETE duplicates immediately.
+
+=== RULE 7: TEMP FILE CLEANUP ===
+Processed podcast files are stored in:
+  ./satsang-api/temp-jobs/<job-uuid>/
+
+CLEANUP POLICY: Delete temp files after 1 DAY (not 7 days)
+- User can manually download files immediately after processing
+- Files older than 24 hours should be auto-deleted to save space
+- Implement cleanup cron job in backend if needed
+- Current: 70MB per 30-min episode = storage fills quickly
+
