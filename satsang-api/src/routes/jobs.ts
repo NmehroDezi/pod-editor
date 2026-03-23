@@ -21,10 +21,13 @@ if (!fs.existsSync(tmpDir)) {
 const upload = multer({
   storage: multer.memoryStorage(),
   fileFilter: (req, file, cb) => {
-    if (file.mimetype === 'audio/mpeg' || file.originalname.endsWith('.mp3')) {
+    const isMp3 = file.mimetype === 'audio/mpeg' || file.originalname.endsWith('.mp3');
+    const isM4a = file.mimetype === 'audio/mp4' || file.originalname.endsWith('.m4a');
+    
+    if (isMp3 || isM4a) {
       cb(null, true);
     } else {
-      cb(new Error('Only MP3 files allowed'));
+      cb(new Error('Only MP3 and M4A files allowed'));
     }
   },
 });

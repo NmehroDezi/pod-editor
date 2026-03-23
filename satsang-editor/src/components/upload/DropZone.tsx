@@ -10,17 +10,18 @@ export function DropZone() {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       console.log('DropZone onDrop - Accepted:', acceptedFiles.length, acceptedFiles);
-      const mp3Files = acceptedFiles.filter((file) =>
-        file.type === 'audio/mpeg' || file.name.endsWith('.mp3')
+      const audioFiles = acceptedFiles.filter((file) =>
+        file.type === 'audio/mpeg' || file.type === 'audio/mp4' || 
+        file.name.endsWith('.mp3') || file.name.endsWith('.m4a')
       );
 
-      console.log('DropZone onDrop - MP3 files:', mp3Files.length, mp3Files);
-      if (mp3Files.length > 0) {
-        addFiles(mp3Files);
+      console.log('DropZone onDrop - Audio files:', audioFiles.length, audioFiles);
+      if (audioFiles.length > 0) {
+        addFiles(audioFiles);
       }
 
-      if (mp3Files.length < acceptedFiles.length) {
-        alert('Only MP3 files are accepted.');
+      if (audioFiles.length < acceptedFiles.length) {
+        alert('Only MP3 and M4A files are accepted.');
       }
     },
     [addFiles]
@@ -28,7 +29,7 @@ export function DropZone() {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: { 'audio/mpeg': ['.mp3'] },
+    accept: { 'audio/mpeg': ['.mp3'], 'audio/mp4': ['.m4a'] },
     multiple: true,
   });
 
@@ -47,7 +48,7 @@ export function DropZone() {
         <Upload className="w-16 h-16 text-satsang-turmeric" />
         <div>
           <p className="text-xl font-semibold text-satsang-bark">
-            {isDragActive ? 'Drop your MP3 files here' : 'Drag & drop MP3 files'}
+            {isDragActive ? 'Drop your audio files here' : 'Drag & drop MP3 or M4A files'}
           </p>
           <p className="text-satsang-ash mt-2">
             or click to select files from your computer
@@ -63,7 +64,7 @@ export function DropZone() {
         )}
 
         <p className="text-sm text-satsang-ash mt-4">
-          MP3 files only • Upload multiple files and reorder them below
+          MP3 and M4A files • Upload multiple files and reorder them below
         </p>
       </div>
     </div>
